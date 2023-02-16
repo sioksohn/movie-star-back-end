@@ -25,7 +25,7 @@ class Viewer(db.Model):
     def from_dict(cls, request_body):
         new_viewer = cls(
             name = request_body["name"],
-            email = request_body["email"]
+            email = request_body["email"],
             password = request_body["password"]
         )
         return new_viewer
