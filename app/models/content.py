@@ -8,7 +8,7 @@ class Content(db.Model):
     media_type = db.Column(db.String, nullable=False)
     vote_average = db.Column(db.Float, nullable=False)
     watchlists = db.relationship("Watchlist", back_populates="content") #viewers
-    # genre = db.Column(db.String)     
+    # genre = db.Column(db.String, nullable=False) 
 
     def to_dict(self):
         content_dict = {
