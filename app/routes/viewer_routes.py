@@ -56,12 +56,10 @@ def delete_one_viewer(viewer_id):
 @viewers_bp.route("/<viewer_id>/watchlist", methods=["GET"])
 def get_current_watchlist(viewer_id):
     viewer = validate_model(Viewer, viewer_id)
-    content_query = Content.query.filter(Watchlist.viewer_id==viewer_id)
-    contents = content_query.all()
+    contents = Content.query.join(Watchlist, Watchlist.content_id==Content.id).filter(Watchlist.viewer_id==viewer_id)
 
     watched_contents = []
     for content in contents:
-
         watched_contents.append(content.to_dict())
         
     return jsonify(watched_contents)
