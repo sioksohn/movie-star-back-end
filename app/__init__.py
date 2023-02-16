@@ -46,3 +46,6 @@ def create_app(test_config=None):
 
     CORS(app)
     return app
+
+if __name__ == '__main__':
+    app.run(port=8000)
