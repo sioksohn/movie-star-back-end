@@ -20,11 +20,10 @@ class Content(db.Model):
             "vote_average" :self.vote_average   
         }
 
-        watched_viewers = []
+        watched_users = []
         for watched_viewer in self.watchlists:
-            watched_viewers.append(watched_viewer.to_dict())
-        content_dict["watchlists"] = watched_viewers
-        
+            watched_users.append(watched_viewer.to_dict())
+        content_dict["watchlists"] = watched_users
         return content_dict
 
     @classmethod
