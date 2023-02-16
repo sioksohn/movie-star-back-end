@@ -1,7 +1,7 @@
 from app import db
 
 class Content(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True)
     poster = db.Column(db.String, nullable=False)
     title = db.Column(db.String, nullable=False)
     date = db.Column(db.DateTime, nullable=False)
@@ -29,6 +29,7 @@ class Content(db.Model):
     @classmethod
     def from_dict(cls, request_body):
         new_content = cls(
+            id = request_body["id"],
             poster = request_body["poster"],
             title = request_body["title"],
             date = request_body["date"],

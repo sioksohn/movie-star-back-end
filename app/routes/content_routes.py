@@ -36,7 +36,8 @@ def get_one_content(content_id):
 def update_one_content(content_id):
     content_info = validate_model(Content, content_id)
     request_body = validate_request_body(Content, request.get_json())
-
+    
+    content_info.id = request_body["id"]
     content_info.poster = request_body["poster"]
     content_info.title = request_body["title"]
     content_info.date = request_body["date"]
