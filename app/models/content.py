@@ -4,7 +4,7 @@ class Content(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     poster = db.Column(db.String, nullable=False)
     title = db.Column(db.String, nullable=False)
-    date = db.Column(db.DateTime, nullable=False)
+    date = db.Column(db.String, nullable=False)
     media_type = db.Column(db.String, nullable=False)
     vote_average = db.Column(db.Float, nullable=False)
     watchlists = db.relationship("Watchlist", back_populates="content") #viewers
