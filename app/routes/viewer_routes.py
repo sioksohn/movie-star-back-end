@@ -33,6 +33,9 @@ def get_viewers():
     else: 
         viewers = Viewer.query.all()
 
+    if not viewers:
+        return abort(make_response({"details":f"This email doesn't exist."}, 488))
+
     viewer_response = []
     for viewer in viewers:
         viewer_response.append(viewer.to_dict())
