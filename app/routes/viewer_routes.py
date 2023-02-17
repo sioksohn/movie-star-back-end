@@ -31,15 +31,14 @@ def get_viewers():
     if email_query:
         viewers = Viewer.query.filter_by(email=email_query)
     else: 
-        viewers = Viewer.query.all()
-
-    if not viewers:
-        return abort(make_response({"details":f"This email doesn't exist."}, 488))
+        viewers = Viewer.query.all()    
 
     viewer_response = []
     for viewer in viewers:
         viewer_response.append(viewer.to_dict())
 
+    if not viewer_response:
+            return abort(make_response({"details":f"This email doesn't exist."}, 488))
     return jsonify(viewer_response)
 
 @viewers_bp.route("/<viewer_id>", methods=["GET"])
