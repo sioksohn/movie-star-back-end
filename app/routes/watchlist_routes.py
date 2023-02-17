@@ -36,71 +36,34 @@ def delete_one_watchlist(viewer_id):
     
     return make_response(jsonify(watchlist.to_dict()), 200)
 
-# @watchlist_bp.route("/<viewer_id>/watchlist/add", methods=["POST"])  #{params: {"viewer_id":id , "content":content}}
-# def add_one_content_to_viewer_watchlist(viewer_id, content):
-#     request_body = request.get_json()
-#     request_content = validate_request_body(Content, request_body["content"])
-
-#     viewer = validate_model(Viewer, request_body["viewer_id"])
-#     # content = validate_model(Content, request_content["content_id"])
-#     content = Content.query.get(request_content["content_id"])
-
-#     if not content:
-#         new_content = content
-#         db.session.add(new_content)
-#         db.session.commit()
-
-#     new_watchlist = {}
-#     new_watchlist["viewer_id"] = viewer.id,
-#     new_watchlist["content_id"] = content.id
-        
-
-#     db.session.add(new_watchlist)
-#     db.session.commit()
-
-#     return make_response(jsonify(f"Watchlist {new_watchlist.id} successfully created"), 201)
-
-# @watchlist_bp.route("/test", methods=["POST"])  #{params: {"viewer_id":id , "content":content}}
-# def add_one_content_to_viewer_watchlist():
-#     request_body = request.get_json()
-        
-#     new_content = Content(
-#             poster = request_body["poster"],
-#             title = request_body["title"],
-#             date = request_body["date"],
-#             media_type = request_body["media_type"],
-#             vote_average = request_body["vote_average"]
-#         )
-#     console.log(new_content)
-
-#     db.session.add(new_content)
-#     db.session.commit()
-#     console.log(Content.query.all())
-#     # new_watchlist = {}
-#     # new_watchlist["viewer_id"] = viewer.id,
-#     # new_watchlist["content_id"] = request_content.id
-        
-
-#     # db.session.add(new_watchlist)
-#     # db.session.commit()
-
-#     return make_response(jsonify(f"successfully created"), 201)
-
-@watchlist_bp.route("/add", methods=["POST"]) #viewer_id, content
-def create_content_to_watchlist():
+@watchlist_bp.route("<viewer_id>/add", methods=["POST"]) # request = {viewer_id, content}
+def add_one_content_to_watchlist_of_loggined_viewer(viewer_id):
     request_body = request.get_json()
-    viewer = validate_model(Viewer, request_body["viewer_id"])
     request_content = validate_request_body(Content, request_body["content"])
-    content = validate_model(Content, request_content["content_id"])
+    viewer = validate_model(Viewer, request_body["viewer_id"])
+    content = Content.query.get(request_content["id"])
+
+    if not content:
+        new_content = Content.from_dict(request_content)
+        db.session.add(new_content)
+        db.session.commit()
     
-    request_watchlist = {
-            "viewer_id": request_body["viewer_id"],
-            "content_id": request_content["content_id"]    
+        content = new_content
+
+    duplicate_watchlist = Watchlist.query.filter_by(content_id=content.id).filter_by(viewer_id=viewer.id).all()
+    print(duplicate_watchlist)
+
+    if not duplicate_watchlist:
+        request_watchlist = {
+            "viewer_id":viewer.id,
+            "content_id":content.id
         }
+        
+        new_watchlist = Watchlist.from_dict(request_watchlist)
 
-    new_watchlist = Watchlist.from_dict(request_watchlist)
+        db.session.add(new_watchlist)
+        db.session.commit()
 
-    db.session.add(new_watchlist)
-    db.session.commit()
-
-    return make_response(jsonify(f"Watchlist {new_watchlist.id} successfully created"), 201)
+        return make_response(jsonify(f"Watchlist {new_watchlist.id} successfully created"), 201)
+    
+    return make_response(jsonify(f"This movie already exists in the watchlist."), 400)

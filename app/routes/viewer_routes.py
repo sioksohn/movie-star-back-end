@@ -18,7 +18,7 @@ def create_viewer():
         viewer_response.append(viewer.to_dict())
 
     if viewer_response:
-        return abort(make_response({"details":f"This email is already registered."}, 444))
+        return abort(make_response({"details":f"This email is already registered."}, 400))
     else:
         db.session.add(new_viewer)
         db.session.commit()
@@ -38,7 +38,7 @@ def get_viewers():
         viewer_response.append(viewer.to_dict())
 
     if not viewer_response:
-            return abort(make_response({"details":f"This email doesn't exist."}, 488))
+            return abort(make_response({"details":f"This email doesn't exist."}, 400))
     return jsonify(viewer_response)
 
 @viewers_bp.route("/<viewer_id>", methods=["GET"])

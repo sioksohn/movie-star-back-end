@@ -36,13 +36,11 @@ def create_app(test_config=None):
     from .routes.viewer_routes import viewers_bp
     app.register_blueprint(viewers_bp)
 
-    from .routes.content_routes import contents_bp
-    app.register_blueprint(contents_bp)
-
     from .routes.watchlist_routes import watchlist_bp
     app.register_blueprint(watchlist_bp)
 
-
+    from .routes.content_routes import contents_bp
+    app.register_blueprint(contents_bp)
 
     CORS(app)
     return app
