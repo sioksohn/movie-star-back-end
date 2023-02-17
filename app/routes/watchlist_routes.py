@@ -86,20 +86,21 @@ def delete_one_watchlist(viewer_id):
 
 #     return make_response(jsonify(f"successfully created"), 201)
 
-@watchlist_bp.route("/add", methods=["POST"])
-def create_watchlist():
-    request_body = validate_request_body(Content, request.get_json())
+@watchlist_bp.route("/add", methods=["POST"]) #viewer_id, content
+def create_content_to_watchlist():
+    request_body = request.get_json()
+    viewer = validate_model(Viewer, request_body["viewer_id"])
+    request_content = validate_request_body(Content, request_body["content"])
+    content = validate_model(Content, request_content["content_id"])
     
-    new_content = Content(
-            poster = request_body["poster"],
-            title = request_body["title"],
-            date = request_body["date"],
-            media_type = request_body["media_type"],
-            vote_average = request_body["vote_average"]
-        )
-    console.log(new_content)
+    request_watchlist = {
+            "viewer_id": request_body["viewer_id"],
+            "content_id": request_content["content_id"]    
+        }
 
-    db.session.add(new_content)
+    new_watchlist = Watchlist.from_dict(request_watchlist)
+
+    db.session.add(new_watchlist)
     db.session.commit()
 
     return make_response(jsonify(f"Watchlist {new_watchlist.id} successfully created"), 201)

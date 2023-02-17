@@ -56,3 +56,18 @@ def delete_one_content(content_id):
     db.session.commit()
     
     return make_response(jsonify(content_info.to_dict()), 200)
+
+@contents_bp.route("/add", methods=["POST"]) #viewer_id, content
+def create_content_to_watchlist():
+
+    request_body = request.get_json()
+    request_content = validate_request_body(Content, request_body["content"])
+    viewer = validate_model(Viewer, request_body["viewer_id"])
+    content = validate_model(Content, request_content["content_id"])
+
+    if not content:
+        new_content = Content.from_dict(content)
+        db.session.add(new_content)
+        db.session.commit()
+
+    return make_response(jsonify(f"Content {content.id} successfully created"), 201)
