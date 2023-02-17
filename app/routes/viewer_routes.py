@@ -18,7 +18,6 @@ def create_viewer():
         viewer_response.append(viewer.to_dict())
 
     if viewer_response:
-        print(viewer)
         return abort(make_response({"details":f"This email is already registered."}, 400))
     else:
         db.session.add(new_viewer)
