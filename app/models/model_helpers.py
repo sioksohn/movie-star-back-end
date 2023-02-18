@@ -23,7 +23,7 @@ def validate_request_body(cls, request_body):
     if cls.__name__== "Viewer" or  cls.__name__== "Watchlist":
         if  "id" in attributes: 
             attributes.remove("id")
-    
+
     # check whether there are missing attributes in the request body
     for attribute in attributes:
         if attribute not in request_body.keys():
