@@ -53,7 +53,7 @@ def update_one_viewer(viewer_id):
 
     viewer_info.name = request_body["name"]
     viewer_info.email = request_body["email"]
-    # viewer_info.password = request_body["password"]
+    viewer_info.password = request_body["password"]
 
     db.session.commit()
 
