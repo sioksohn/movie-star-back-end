@@ -28,7 +28,7 @@ def read_all_watchlists():
     return jsonify(watchlist_response)
 
 @watchlist_bp.route("/<watchlist_id>", methods=["DELETE"])
-def delete_one_watchlist(viewer_id):
+def delete_one_watchlist(watchlist_id):
     watchlist = validate_model(Watchlist, watchlist_id)
     
     db.session.delete(watchlist)
